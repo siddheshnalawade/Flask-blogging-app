@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Posts</title>
+
+{% endblock %}
+
+
+{% block body %}
+<hr>
+<h1>All Blogs</h1>
+<br>
+<div class="form-group">
+<a href="{{url_for('newpost')}}" class="btn btn-outline-info" >New Post</a>
+<div>
+<hr>
+
+    {% for post in posts.items %}
+    <link rel="stylesheet" type="text/css" href="style.css">
+       <artical class="media content-section">
+       <img class="profile"  src="{{ url_for('static', filename='profilepics/' + post.author.image_file)}}">
+       <div class="media-body">
+       <div class="artical-metadate">
+        <a class="mr-2" href="#">{{post.author.username}}</a>
+        <small class="text-muted">{{post.date_posted.strftime('%Y-%m-%d')}}</small>
+        </div>
+        <h2><a class="artical-title" href="#">{{post.title}}</a></h2>
+        <p class="artical-content">{{post.content}}</p>
+        </div>
+        <div>
+        <a class="btn btn-primary btn-sm" href="{{url_for('edit', id=post.id)}}">Update</a>
+        <br>
+        <br>
+        <a class="btn btn-danger btn-sm" href="{{url_for('delete', id=post.id)}}">Delete</a>
+        </div>
+        </artical>
+        <hr>
+    {% endfor %}
+    
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if posts.page == page_num%}
+                <a class="btn btn-info mb-4" href="{{url_for('blogpost', page=page_num)}}">{{page_num}}</a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{url_for('blogpost', page=page_num)}}">{{page_num}}</a>
+            {% endif %}
+        {% else %}
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
